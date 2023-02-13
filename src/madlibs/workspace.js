@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 
 export default function WorkSpace({currentEntry, saveEntry}){
     function onChange(e) {

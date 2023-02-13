@@ -1,15 +1,9 @@
 import React from 'react';
-import { useCallback } from 'react';
 import { useContext } from 'react';
 import { useEffect } from 'react';
-import { useInsertionEffect } from 'react';
-import { useLayoutEffect } from 'react';
-import { useMemo } from 'react';
 import { useReducer } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
-import { useSyncExternalStore } from 'react';
-import { useTransition } from 'react';
 
 import WordList from './wordlist';
 import WorkSpace from './workspace';
@@ -19,32 +13,34 @@ import './madlibs.css';
 
 
 export default function MadLibs(){
-    let dummyEntries = [
-        { id: 0, tag: 1, type: 'noun', value: ''},
-        { id: 1, tag: 2, type: 'verb', value: ''},
-        { id: 2, tag: 3, type: 'verb', value: ''},
-    ];
+
+    useEffect(() => {
+        let dummyEntries = [
+            { id: 0, tag: 1, type: 'noun', value: ''},
+            { id: 1, tag: 2, type: 'verb', value: ''},
+            { id: 2, tag: 3, type: 'verb', value: ''},
+        ];
+
+        setEntries(dummyEntries);
+        
+    }, []);
 
     const [results, setResults] = useState('');
-    const [entries, setEntries] = useState(dummyEntries);
+    const [entries, setEntries] = useState([]);
     const [currentEntry, setCurrentEntry] = useState({id:-1, tag: -1, type: '', value: ''});
     const [isOver, setIsOver] = useState(false);
     const [isDone, setIsDone] = useState(false);
 
     function saveEntry(entry){
         setCurrentEntry(entry);
-        console.log(entry.value);
         let newEntries = entries.map((e) => {
             if (e.tag === entry.tag){
-                console.log('found it');
                 return {...e, value: entry.value};
             }
             return e;
         });
         setEntries(newEntries);
-
-        //set isDone to true if all entries are entered
-        setIsDone(true);
+        setIsDone(!newEntries.some((e) => e.value === ''));
     }
 
     function clearEntry(entry){
@@ -57,6 +53,7 @@ export default function MadLibs(){
                 <button onClick={() => setIsOver(true)} className="btn btn-primary">Show Results</button>
             );
         }
+        return(<></>);
     }
 
     function checkifOver(){
