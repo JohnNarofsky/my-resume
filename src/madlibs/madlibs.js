@@ -4,24 +4,23 @@ import { useEffect } from 'react';
 import { useReducer } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
+import axios from "axios";
 
 import WordList from './wordlist';
 import WorkSpace from './workspace';
-import GameResult from './gameresults';
+import GameResult from './gameresult';
 
 import './madlibs.css';
 
+const baseURL = "http://localhost:5225/Madlibs?GameId=3";
 
 export default function MadLibs(){
-
     useEffect(() => {
-        let dummyEntries = [
-            { id: 0, tag: 1, type: 'noun', value: ''},
-            { id: 1, tag: 2, type: 'verb', value: ''},
-            { id: 2, tag: 3, type: 'verb', value: ''},
-        ];
-
-        setEntries(dummyEntries);
+    
+        axios.get(baseURL).then((response) => {
+            setEntries(response.data.wordEntries);
+            setResults(response.data.article);
+        });
         
     }, []);
 
@@ -78,8 +77,10 @@ export default function MadLibs(){
         );    
     }
     return (
-        <div className='subapp'>
-            <GameResult goBack={goBack} />
+        <div className='container-sm'>
+            <div className='row'>
+                <GameResult goBack={goBack} results={results} />
+            </div>
         </div>
     );
     

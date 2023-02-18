@@ -1,10 +1,20 @@
 .word-list
 {
-    background-color: rgb(162, 183, 129);
+    background-color: rgb(251, 253, 249);
     font-weight:bold;
+    margin: 1em;
+    border-radius: 1em;
+    border-style: outset;
 }
 
 .work-space
 {
-    background-color: rgb(189, 154, 154);
+    background-color: rgb(241, 238, 238);
+    margin: 1em;
+    border-radius: 1em;
+}
+
+.game-text
+{
+    margin: 1em;
 }
