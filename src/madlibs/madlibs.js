@@ -1,15 +1,14 @@
 import React from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useContext } from 'react';
-import { useEffect } from 'react';
 import { useReducer } from 'react';
 import { useRef } from 'react';
-import { useState } from 'react';
 import axios from "axios";
+import _ from "lodash";
 
 import WordList from './wordlist';
 import WorkSpace from './workspace';
 import GameResult from './gameresult';
-
 import './madlibs.css';
 
 const baseURL = "http://localhost:5225/Madlibs?GameId=3";
@@ -27,20 +26,31 @@ export default function MadLibs(){
     const [results, setResults] = useState('');
     const [entries, setEntries] = useState([]);
     const [currentEntry, setCurrentEntry] = useState({id:-1, tag: -1, type: '', value: ''});
+    const [debouncedEntry, setDebouncedEntry] = useState({id:-1, tag: -1, type: '', value: ''});
     const [isOver, setIsOver] = useState(false);
     const [isDone, setIsDone] = useState(false);
 
-    function saveEntry(entry){
-        setCurrentEntry(entry);
+    useEffect(() => {
+        debounce(currentEntry);
+    }, [currentEntry]);
+
+    const debounce = useCallback(
+        _.debounce((entry) => {
+            setDebouncedEntry(entry);
+            }, 1000),
+        []
+    );
+
+    useEffect(()=>{
         let newEntries = entries.map((e) => {
-            if (e.tag === entry.tag){
-                return {...e, value: entry.value};
+            if (e.tag === debouncedEntry.tag){
+                return {...e, value: debouncedEntry.value};
             }
             return e;
         });
         setEntries(newEntries);
         setIsDone(!newEntries.some((e) => e.value === ''));
-    }
+    }, [debouncedEntry]);
 
     function clearEntry(entry){
         setIsDone(false);
@@ -68,7 +78,7 @@ export default function MadLibs(){
             <div className='container-sm'>
                 <div className='row'>
                     <WordList entries = {entries} handleEntrySelection={setCurrentEntry} onEntryClear={clearEntry} />
-                    <WorkSpace currentEntry = {currentEntry} saveEntry = {saveEntry} />
+                    <WorkSpace currentEntry = {currentEntry} setCurrentEntry = {setCurrentEntry}/>
                 </div>
                 <div className='row'>
                     <Proceed/>
@@ -79,7 +89,7 @@ export default function MadLibs(){
     return (
         <div className='container-sm'>
             <div className='row'>
-                <GameResult goBack={goBack} results={results} />
+                <GameResult goBack={goBack} results={results} entries={entries} />
             </div>
         </div>
     );
