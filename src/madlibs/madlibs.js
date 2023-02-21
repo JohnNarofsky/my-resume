@@ -16,7 +16,7 @@ import './madlibs.css';
 //const baseURL = "https://madlibsapi20230221095240.azurewebsites.net/Madlibs?GameId=3";
 
 //aws
-const baseURL = "http://madli-recip-qf86ndp62dd9-929538723.us-east-1.elb.amazonaws.com/madlibs?gameid=5"
+const baseURL = "https://f974k9qkqh.execute-api.us-east-1.amazonaws.com/madlibs"
 
 
 //const baseURL = env.BASEAPIURL; 
