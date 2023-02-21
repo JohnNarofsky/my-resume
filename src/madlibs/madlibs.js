@@ -5,13 +5,21 @@ import { useReducer } from 'react';
 import { useRef } from 'react';
 import axios from "axios";
 import _ from "lodash";
+import {env} from "process";
 
 import WordList from './wordlist';
 import WorkSpace from './workspace';
 import GameResult from './gameresult';
 import './madlibs.css';
 
-const baseURL = "http://localhost:5225/Madlibs?GameId=3";
+//azure
+//const baseURL = "https://madlibsapi20230221095240.azurewebsites.net/Madlibs?GameId=3";
+
+//aws
+const baseURL = "http://madli-recip-qf86ndp62dd9-929538723.us-east-1.elb.amazonaws.com/madlibs?gameid=5"
+
+
+//const baseURL = env.BASEAPIURL; 
 
 export default function MadLibs(){
     useEffect(() => {
